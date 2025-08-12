@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Card, InputNumber, Button, Divider, Row, Col, Typography, Space, Table } from 'antd'
-import { CalculatorOutlined, DollarOutlined, CalendarOutlined, PercentageOutlined, HomeOutlined } from '@ant-design/icons'
+import { CalculatorOutlined, DollarOutlined, CalendarOutlined, PercentageOutlined, HomeOutlined, LogoutOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
 
@@ -44,6 +44,19 @@ function MortgageCalculator() {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(amount)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch('https://db.madewithmanifest.com/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      // Redirect or refresh page after logout
+      window.location.reload()
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
   }
 
   const summaryData = results ? [
@@ -93,7 +106,15 @@ function MortgageCalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 relative">
+          <Button 
+            type="text" 
+            icon={<LogoutOutlined />} 
+            onClick={handleLogout}
+            className="absolute top-0 right-0 text-gray-600 hover:text-red-500"
+          >
+            Logout
+          </Button>
           <Title level={1} className="flex items-center justify-center gap-3 mb-2">
             <HomeOutlined className="text-blue-600" />
             Mortgage Calculator
